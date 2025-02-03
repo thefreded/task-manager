@@ -1,66 +1,34 @@
-# task-manager
+# Task Manager App
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+A Quarkus-based app to manage tasks, using Keycloak for authentication and role-based authorization.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Prerequisites
+1. **Keycloak Server**: Ensure Keycloak is running.
+2. **Keycloak Client**: Set up with these environment variables:
+    - `KEYCLOAK_URL`
+    - `KEYCLOAK_CLIENT_ID`
+    - `KEYCLOAK_CLIENT_SECRET`
+3. **Keycloak User**: Create a user with the `admin` or `user` role.
 
-## Running the application in dev mode
+## Configuration
 
-You can run your application in dev mode that enables live coding using:
+Create a `config.env` file in the root of your project for the following:
+- `KEYCLOAK_URL`
+- `KEYCLOAK_CLIENT_ID`
+- `KEYCLOAK_CLIENT_SECRET`
 
-```shell script
-./mvnw quarkus:dev
-```
+## Running the App
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+1. Install `dotenv-cli` globally (this is used to load the env variables):
+  
 
-## Packaging and running the application
+        npm install -g dotenv-cli
+   
+  
 
-The application can be packaged using:
+2. Run the app:
 
-```shell script
-./mvnw package
-```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+    dotenv -e config.env ./mvnw quarkus:dev
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/task-manager-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+The app will start at http://localhost:8081/main/

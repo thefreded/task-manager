@@ -1,4 +1,4 @@
-package com.freded.control;
+package com.freded.control.service;
 
 
 import io.quarkus.security.identity.SecurityIdentity;

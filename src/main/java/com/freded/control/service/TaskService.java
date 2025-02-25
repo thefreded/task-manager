@@ -1,4 +1,4 @@
-package com.freded.control;
+package com.freded.control.service;
 
 import com.freded.entity.TaskDTO;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * First task service implementation that persist task within application running cycle.
+ * Moved to TaskDao now.
+ */
 @ApplicationScoped
 public class TaskService {
     final private List<TaskDTO> tasks = new ArrayList<>() ;

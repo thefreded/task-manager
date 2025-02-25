@@ -1,9 +1,10 @@
-package com.freded.control;
+package com.freded.control.task;
 
 import com.freded.CustomLog;
 import com.freded.boundary.Task;
 import com.freded.entity.PaginationAndSortingDTO;
 import com.freded.entity.TaskDTO;
+import com.freded.entity.TaskSortAndPaginationDTO;
 import jakarta.inject.Inject;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class TaskImpl implements Task {
     @Override
     @CustomLog
     public List<TaskDTO> getAllTask(
-          PaginationAndSortingDTO qParams
+            TaskSortAndPaginationDTO qParams
     ) {
         return taskDao.getAllTask(qParams);
     }

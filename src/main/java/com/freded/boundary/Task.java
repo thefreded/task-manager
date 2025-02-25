@@ -1,7 +1,7 @@
 package com.freded.boundary;
 
-import com.freded.entity.PaginationAndSortingDTO;
 import com.freded.entity.TaskDTO;
+import com.freded.entity.TaskSortAndPaginationDTO;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -30,11 +30,11 @@ public interface Task {
 
     /**
      * Retrieves all task created by the logged-in user.
-     * @param qParams the {@link PaginationAndSortingDTO} object of pagination and sorting parameters.
+     * @param qParams the {@link TaskSortAndPaginationDTO} object of pagination and sorting parameters.
      * @return a list of {@link TaskDTO}.
      */
     @GET
-    public List<TaskDTO> getAllTask(@BeanParam final PaginationAndSortingDTO qParams);
+    public List<TaskDTO> getAllTask(@BeanParam final TaskSortAndPaginationDTO qParams);
 
     /**
      * Retrieves a given task with the taskId provided.

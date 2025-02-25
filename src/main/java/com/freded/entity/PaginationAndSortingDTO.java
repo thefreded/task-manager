@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaginationAndSortingDTO {
+public  abstract class  PaginationAndSortingDTO {
 
     /**
      * The starting point of the data to be sent as result.

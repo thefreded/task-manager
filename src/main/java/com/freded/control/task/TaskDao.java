@@ -1,10 +1,13 @@
-package com.freded.control;
+package com.freded.control.task;
 
 import com.freded.CustomWebApplicationException;
 import com.freded.CustomLog;
+import com.freded.control.service.PaginationAndSortingService;
+import com.freded.control.service.UserService;
 import com.freded.entity.PaginationAndSortingDTO;
 import com.freded.entity.TaskDTO;
-import jakarta.enterprise.context.RequestScoped;
+import com.freded.entity.TaskSortAndPaginationDTO;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -14,11 +17,9 @@ import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@RequestScoped
+@ApplicationScoped
 public class TaskDao {
 
-    private static final String DESC = "DESC";
-    private static final String ASC = "ASC";
     private static  final String CREATEDBY = "createdBy";
 
 
@@ -27,6 +28,9 @@ public class TaskDao {
 
     @Inject
     UserService userService;
+
+    @Inject
+    PaginationAndSortingService paginationAndSortingService;
 
     /**
      * Adds a new task to the entity manager/database.
@@ -46,10 +50,10 @@ public class TaskDao {
      * Gets all tasks created by the currently authenticated user.
      * Can also be sorted and paginated based on the provided parameters.
      *
-     * @param qParams the {@link PaginationAndSortingDTO} containing pagination and sorting options.
+     * @param qParams the {@link TaskSortAndPaginationDTO} containing pagination and sorting options.
      * @return a list of {@link TaskDTO} objects representing the tasks created by the user in regard to the options provided in {@code qParams}.
      */
-    public List<TaskDTO> getAllTask(final PaginationAndSortingDTO qParams){
+    public List<TaskDTO> getAllTask(final TaskSortAndPaginationDTO qParams){
         // 1. Get the CriteriaBuilder.
         CriteriaBuilder cb = em.getCriteriaBuilder();
 
@@ -68,7 +72,7 @@ public class TaskDao {
         cbQuery.select(root).where(cb.equal(root.get(CREATEDBY), createdByParam));
 
         // Apply sorting based on the parameters provided in qParams.
-        sortTask(cb, cbQuery, root, qParams);
+        paginationAndSortingService.sort(cb, cbQuery, root, qParams);
 
         // Create a TypedQuery to execute the CriteriaQuery and get the result as TaskDTO objects.
         TypedQuery<TaskDTO> typedQuery = em.createQuery(cbQuery);
@@ -77,7 +81,7 @@ public class TaskDao {
         typedQuery.setParameter(CREATEDBY, userService.getUsername());
 
         // Apply pagination settings to the query based on the provided qParams.
-        paginateTask(typedQuery, qParams);
+        paginationAndSortingService.paginate(typedQuery, qParams);
 
 
         return typedQuery.getResultList();
@@ -147,37 +151,5 @@ public class TaskDao {
                 .getResultStream().findFirst().orElse(null);
     }
 
-    /**
-     * Sorts the tasks based on the provided {@link PaginationAndSortingDTO} parameters.
-     *
-     * @param cb the {@link CriteriaBuilder} used to construct the query.
-     * @param cbQuery the {@link CriteriaQuery} for {@link TaskDTO}.
-     * @param root the root entity for the {@link TaskDTO} in the query.
-     * @param qParams the {@link PaginationAndSortingDTO} containing sorting options.
-     */
-    private void sortTask(
-            final CriteriaBuilder cb,
-            final CriteriaQuery<TaskDTO> cbQuery,
-            final Root<TaskDTO> root,
-            final PaginationAndSortingDTO qParams
-    ){
 
-        Order order = DESC.equalsIgnoreCase(qParams.getSortOrder()) ?
-                cb.desc(root.get(qParams.getSortBy()))
-                : cb.asc(root.get(qParams.getSortBy()));
-
-        cbQuery.orderBy(order);
-
-
-    }
-
-    /**
-     *  Paginate the tasks based on the provided {@link PaginationAndSortingDTO} parameters.
-     * @param typedQuery the {@link TypedQuery} to apply pagination to.
-     * @param qParams the {@link PaginationAndSortingDTO} containing pagination options.
-     */
-    private void paginateTask(final TypedQuery<TaskDTO> typedQuery, final PaginationAndSortingDTO qParams){
-        typedQuery.setFirstResult(qParams.getOffset());
-        typedQuery.setMaxResults(qParams.getLimit());
-    }
 }

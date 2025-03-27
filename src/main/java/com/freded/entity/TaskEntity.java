@@ -1,9 +1,6 @@
 package com.freded.entity;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.freded.control.dto.TaskDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -20,13 +17,12 @@ import java.util.UUID;
  * Represents a Task in the entity manager.
  * It includes fields for task identification, name, description, creation date,
  * last updated date, and the user who created the task.
- *
  */
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskDTO {
+public class TaskEntity {
 
     /**
      * Unique identifier for the task, generated randomly.
@@ -63,15 +59,23 @@ public class TaskDTO {
      */
     private String createdBy;
 
-    @Override
-    public String toString(){
-        ObjectMapper mapper =  new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-
-        try {
-           return mapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    public static TaskEntity fromDTO(TaskDTO taskDTO) {
+        TaskEntity taskEntity = new TaskEntity();
+        taskEntity.setName(taskDTO.getName());
+        taskEntity.setDescription(taskDTO.getDescription());
+        return taskEntity;
     }
+
+    // toDTO method
+    public TaskDTO toDTO() {
+        TaskDTO taskDTO = new TaskDTO();
+        taskDTO.setId(this.id);
+        taskDTO.setName(this.name);
+        taskDTO.setDescription(this.description);
+        taskDTO.setCreatedAt(this.createdAt);
+        taskDTO.setUpdatedAt(this.updatedAt);
+        return taskDTO;
+    }
+
+
 }

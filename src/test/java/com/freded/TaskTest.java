@@ -2,7 +2,7 @@ package com.freded;
 
 import com.freded.control.service.TaskService;
 import com.freded.control.service.UserService;
-import com.freded.entity.TaskDTO;
+import com.freded.control.dto.TaskDTO;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.security.TestSecurity;

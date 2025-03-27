@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.freded</groupId>
     <artifactId>task-manager</artifactId>
@@ -12,9 +13,22 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.17.8</quarkus.platform.version>
+        <quarkus.platform.version>3.20.0</quarkus.platform.version>
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.5.0</surefire-plugin.version>
+        <lombok.version>1.18.34</lombok.version>
+        <quarkus-hibernate-validator.version>3.20.0</quarkus-hibernate-validator.version>
+        <quarkus-arc.version>3.20.0</quarkus-arc.version>
+        <quarkus-hibernate-orm.version>3.20.0</quarkus-hibernate-orm.version>
+        <quarkus-resteasy-jackson.version>3.20.0</quarkus-resteasy-jackson.version>
+        <resteasy-multipart-provider.version>6.2.12.Final</resteasy-multipart-provider.version>
+        <quarkus-jdbc-h2.version>3.20.0</quarkus-jdbc-h2.version>
+        <quarkus-oidc.version>3.20.0</quarkus-oidc.version>
+        <quarkus-security.version>3.20.0</quarkus-security.version>
+        <quarkus-junit5.version>3.20.0</quarkus-junit5.version>
+        <quarkus-junit5-mockito.version>3.20.0</quarkus-junit5-mockito.version>
+        <quarkus-test-security.version>3.20.0</quarkus-test-security.version>
+        <io.rest-assured.version>5.5.1</io.rest-assured.version>
     </properties>
 
     <dependencyManagement>
@@ -34,95 +48,87 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
+            <version>${quarkus-arc.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-orm</artifactId>
+            <version>${quarkus-hibernate-orm.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-validator</artifactId>
+            <version>${quarkus-hibernate-validator.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-resteasy-jackson</artifactId>
+            <version>${quarkus-resteasy-jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-multipart-provider</artifactId>
+            <version>${resteasy-multipart-provider.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-h2</artifactId>
+            <version>${quarkus-jdbc-h2.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-oidc</artifactId>
+            <version>${quarkus-oidc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-security</artifactId>
+            <version>${quarkus-security.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
+            <version>${quarkus-junit5.version}</version>
             <scope>test</scope>
         </dependency>
-
-
 
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5-mockito</artifactId>
+            <version>${quarkus-junit5-mockito.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-test-security</artifactId>
+            <version>${quarkus-test-security.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
+            <version>${io.rest-assured.version}</version>
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.34</version>
-            <scope>provided</scope>
-        </dependency>
-
-
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.18.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.18.2</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/io.quarkus/quarkus-hibernate-orm -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-hibernate-orm</artifactId>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/io.quarkus/quarkus-hibernate-validator -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-hibernate-validator</artifactId>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/io.quarkus/quarkus-resteasy-jackson -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-resteasy-jackson</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-multipart-provider</artifactId>
-        </dependency>
-
-        <!-- JDBC Driver for H2 -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jdbc-h2</artifactId>
-        </dependency>
-
-        <!-- Keycloak OIDC for authentication -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-oidc</artifactId>
-        </dependency>
-
-        <!-- Quarkus security for handling authentication -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-security</artifactId>
-        </dependency>
 
     </dependencies>
 
@@ -174,7 +180,8 @@
                 </executions>
                 <configuration>
                     <systemPropertyVariables>
-                        <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                        <native.image.path>${project.build.directory}/${project.build.finalName}-runner
+                        </native.image.path>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                         <maven.home>${maven.home}</maven.home>
                     </systemPropertyVariables>

@@ -1,4 +1,4 @@
-package com.freded.entity;
+package com.freded.control.dto;
 
 import jakarta.ws.rs.FormParam;
 import lombok.AllArgsConstructor;

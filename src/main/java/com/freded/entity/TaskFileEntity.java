@@ -1,8 +1,6 @@
 package com.freded.entity;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.freded.control.dto.TaskFileDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -19,7 +17,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskFileDTO {
+public class TaskFileEntity {
 
     /**
      * Unique identifier for the file.
@@ -44,16 +42,23 @@ public class TaskFileDTO {
     private byte[] fileData;
 
 
+    public static TaskFileEntity fromDTO(TaskFileDTO taskFileDTO) {
+        TaskFileEntity taskFileEntity = new TaskFileEntity();
+        taskFileEntity.setFileName(taskFileDTO.getFileName());
+        taskFileEntity.setFileType(taskFileDTO.getFileType());
+        taskFileEntity.setTaskId(taskFileDTO.getTaskId());
+        taskFileEntity.setFileData(taskFileEntity.getFileData());
 
-    @Override
-    public String toString(){
-        ObjectMapper mapper =  new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
+        return taskFileEntity;
+    }
 
-        try {
-            return mapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    public TaskFileDTO toDTO() {
+        TaskFileDTO taskFileDTO = new TaskFileDTO();
+        taskFileDTO.setId(this.id);
+        taskFileDTO.setFileName(this.fileName);
+        taskFileDTO.setFileType(this.fileType);
+        taskFileDTO.setTaskId(this.taskId);
+        taskFileDTO.setFileData(this.fileData);
+        return taskFileDTO;
     }
 }

@@ -11,7 +11,7 @@ public class UserService {
     SecurityIdentity securityIdentity;
 
     /**
-     *  Fetch the username from SecurityIdentity
+     * Fetch the username from SecurityIdentity
      *
      * @return {@link String} user name of logged-in user.
      */

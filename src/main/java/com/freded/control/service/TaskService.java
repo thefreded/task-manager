@@ -1,52 +1,78 @@
 package com.freded.control.service;
 
-import com.freded.entity.TaskDTO;
-import jakarta.enterprise.context.ApplicationScoped;
+import com.freded.CustomWebApplicationException;
+import com.freded.control.repository.TaskRepository;
+import com.freded.control.dto.TaskDTO;
+import com.freded.entity.TaskEntity;
+import com.freded.control.dto.TaskSortAndPaginationDTO;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
  * First task service implementation that persist task within application running cycle.
  * Moved to TaskDao now.
  */
-@ApplicationScoped
+@RequestScoped
 public class TaskService {
-    final private List<TaskDTO> tasks = new ArrayList<>() ;
 
+    @Inject
+    TaskRepository taskRepository;
 
-    public TaskDTO addTask(final TaskDTO task){
-        tasks.add(task);
-        return task;
+    @Inject
+    UserService userService;
+
+    @Transactional
+    public TaskDTO create(final TaskDTO task) {
+        TaskEntity newTask = TaskEntity.fromDTO(task);
+
+        String currentUser = userService.getUsername();
+        newTask.setCreatedBy(currentUser);
+        return taskRepository.create(newTask).toDTO();
     }
 
-    public List<TaskDTO> getAllTask(){
-        return  tasks;
+    public List<TaskDTO> getAll(TaskSortAndPaginationDTO qParams) {
+        String currentUser = userService.getUsername();
+        List<TaskEntity> taskEntities = taskRepository.readAll(currentUser, qParams);
+
+        return taskEntities.stream()
+                .map(TaskEntity::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public TaskDTO getTask(final String taskId){
-        return tasks.stream().filter( task -> task.getId().equals(taskId)).findFirst().orElse(null);
+    public TaskDTO get(final String taskId) {
+        String currentUser = userService.getUsername();
+        return taskRepository.read(currentUser, taskId).toDTO();
     }
 
-    public TaskDTO updateTask( final String taskId,  final TaskDTO newTask){
-      TaskDTO updatedTask =  tasks.stream().filter( task -> task.getId().equals(taskId)).peek(task -> {
-            task.setName(newTask.getName());
-            task.setDescription(newTask.getDescription());
-            task.setUpdatedAt(LocalDateTime.now());
-        }).findFirst().orElse(null);
+    @Transactional
+    public String delete(final String taskId) {
 
-      return updatedTask;
+        String currentUser = userService.getUsername();
+        TaskEntity task = taskRepository.read(currentUser, taskId);
+        return taskRepository.delete(task);
     }
 
-    public String deleteTask(final String taskId){
-        long initialSize = tasks.size();
-        tasks.removeIf(task -> task.getId().equals(taskId));
-        if(tasks.size() < initialSize){
-            return taskId;
+    @Transactional
+    public TaskDTO update(final String taskId, final TaskDTO newTask) {
+        String currentUser = userService.getUsername();
+        TaskEntity task = taskRepository.read(currentUser, taskId);
+
+        if (task == null) {
+            throw new CustomWebApplicationException("Task with Id:" + taskId, 204);
         }
-        return null;
+
+        // update task with new task inputs
+        task.setName(newTask.getName());
+        task.setDescription(newTask.getDescription());
+        task.setUpdatedAt(LocalDateTime.now());
+
+        return taskRepository.update(task).toDTO();
     }
 
 }

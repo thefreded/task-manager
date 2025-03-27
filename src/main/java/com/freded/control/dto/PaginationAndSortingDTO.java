@@ -1,4 +1,4 @@
-package com.freded.entity;
+package com.freded.control.dto;
 
 
 import jakarta.ws.rs.DefaultValue;
@@ -12,12 +12,11 @@ import lombok.NoArgsConstructor;
  * DTO used for pagination and sorting of query results.
  * Contains parameters to control the offset, limit, sorting field, and sorting order.
  * This class is used to pass pagination and sorting information in API requests.
- *
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public  abstract class  PaginationAndSortingDTO {
+public abstract class PaginationAndSortingDTO {
 
     /**
      * The starting point of the data to be sent as result.

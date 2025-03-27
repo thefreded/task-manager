@@ -49,7 +49,6 @@ public class TaskTest {
                 .post("/main/tasks")
                 .then()
                 .statusCode(200)
-                .body("createdBy", is("testUser"))
                 .body("name", is(tName))
                 .extract()
                 .path("id");

@@ -44,5 +44,3 @@ nb-configuration.xml
 # TLS Certificates
 .certs/
 
-# Local environment
-.env

@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Setup environment
-        uses: ../.github/actions/setup-environment
+        uses: .github/actions/setup-environment
 
       - name: Run Tests
         run: ./mvnw clean test
@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Setup environment
-        uses: ../.github/actions/setup-environment
+        uses: .github/actions/setup-environment
 
       - name: Build JAR File
         run: ./mvnw package

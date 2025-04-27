@@ -45,6 +45,11 @@ jobs:
           name: task-manager-app
           path: ${{ env.JAR_FILE }}
 
+      # Install Railway CLI
+      - name: Install Railway CLI
+        run: |
+          curl -sSL https://cli.railway.app | sh
+
       # Deploy to Railway
       - name: Deploy to Railway
         env:

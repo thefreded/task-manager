@@ -34,8 +34,11 @@ jobs:
       - name: Build JAR File
         run: ./mvnw package
 
+      - name: List files in target directory
+        run: ls -al target/
+
       - name: Store JAR as Artifact
-        uses: action/upload-artifact@v4.1.1
+        uses: action/upload-artifact@v4
         with:
-          name: quarkus-app
+          name: task-manager-app
           path: target/*.jar

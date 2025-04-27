@@ -11,10 +11,8 @@ RUN apt-get update && apt-get install -y maven
 COPY . .
 
 
-RUN chmod +x mvnw
-
 # Build the jar (skip tests to speed up)
-RUN ./mvnw package -DskipTests
+RUN mvn package -DskipTests
 
 # Stage 2: Create the runtime image
 FROM openjdk:21-jdk-slim

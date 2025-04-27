@@ -6,6 +6,9 @@ WORKDIR /app
 # Copy everything needed to build
 COPY . .
 
+
+RUN chmod +x mvnw
+
 # Build the jar (skip tests to speed up)
 RUN ./mvnw package -DskipTests
 

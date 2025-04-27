@@ -35,7 +35,7 @@ jobs:
         run: ./mvnw package
 
       - name: Store JAR as Artifact
-        uses: action/upload-artifact@v4
+        uses: action/upload-artifact@v4.1.1
         with:
           name: quarkus-app
           path: target/*.jar

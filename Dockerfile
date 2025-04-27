@@ -3,23 +3,23 @@ FROM maven:3.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
-# First copy only pom.xml
+# Copy pom.xml and download dependencies
 COPY pom.xml .
-
-# Pre-fetch dependencies (cache optimization)
 RUN mvn dependency:go-offline
 
-# Now copy the rest of the source code
+# Copy source code
 COPY src ./src
 
-# Build the JAR
-RUN mvn package -DskipTests
+# Build the app as uber-jar
+RUN mvn clean package -DskipTests -Dquarkus.package.type=uber-jar
 
 # Stage 2: Create the runtime image
 FROM openjdk:21-jdk-slim
 
 WORKDIR /app
 
-COPY --from=build /app/target/*-runner.jar /app/task-manager-app.jar
+# Copy the built runner jar
+COPY --from=build /app/target/*-runner.jar /app/app.jar
 
-CMD ["java", "-jar", "/app/task-manager-app.jar"]
+# Run the jar
+CMD ["java", "-jar", "/app/app.jar"]

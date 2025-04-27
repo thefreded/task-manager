@@ -1,0 +1,41 @@
+name: Build and package task manager Quarkus app
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.1.1
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-environment
+
+      - name: Run Tests
+        run: ./mvnw clean test
+
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.1.1
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-environment
+
+      - name: Build JAR File
+        run: ./mvnw package
+
+      - name: Store JAR as Artifact
+        uses: action/upload-artifact@v4
+        with:
+          name: quarkus-app
+          path: target/*.jar

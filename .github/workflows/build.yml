@@ -45,10 +45,22 @@ jobs:
           name: task-manager-app
           path: ${{ env.JAR_FILE }}
 
-      # Deploy to Railway
+  deploy:
+    runs-on: ubuntu-latest
+    container: ghcr.io/railwayapp/cli:latest
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      SVC_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
+      JAR_FILE: ${{ env.JAR_FILE }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
       - name: Deploy to Railway
-        uses: railwayapp/railway-action@v2.1.0
-        with:
-          railway_token: ${{ secrets.RAILWAY_TOKEN }}
-          project_id: ${{ secrets.RAILWAY_PROJECT_ID }}
-          artifact_path: ${{ env.JAR_FILE }}
+        run: |
+          # Log in to Railway
+          railway login --token $RAILWAY_TOKEN
+          
+          # Deploy the JAR file to Railway
+          railway up --service=$SVC_ID --artifact=$JAR_FILE

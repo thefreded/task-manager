@@ -22,7 +22,6 @@ jobs:
   build-and-deploy:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    container: ghcr.io/railwayapp/cli:latest
     needs: test
 
     steps:

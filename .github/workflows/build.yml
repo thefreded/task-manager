@@ -40,7 +40,7 @@ jobs:
           echo "JAR_FILE=$JAR_FILE" >> $GITHUB_ENV
 
       - name: Store JAR as Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: task-manager-app
           path: ${{ env.JAR_FILE }}

@@ -20,6 +20,6 @@ FROM openjdk:21-jdk-slim
 
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar /app/task-manager-app.jar
+COPY --from=build /app/target/*-runner.jar /app/task-manager-app.jar
 
 CMD ["java", "-jar", "/app/task-manager-app.jar"]

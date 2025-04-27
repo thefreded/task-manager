@@ -34,8 +34,21 @@ jobs:
       - name: Build JAR File
         run: ./mvnw package
 
+      - name: Capture JAR file path
+        run: |
+          JAR_FILE=$(ls target/*.jar | head -n 1)
+          echo "JAR_FILE=$JAR_FILE" >> $GITHUB_ENV
+
       - name: Store JAR as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: task-manager-app
-          path: target/*.jar
+          path: ${{ env.JAR_FILE }}
+
+      # Deploy to Railway
+      - name: Deploy to Railway
+        uses: railwayapp/railway-action@v2
+        with:
+          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+          project_id: ${{ secrets.RAILWAY_PROJECT_ID }}
+          artifact_path: ${{ env.JAR_FILE }}

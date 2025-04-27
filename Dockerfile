@@ -3,11 +3,12 @@ FROM maven:3.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
+
+# Install Maven manually
+RUN apt-get update && apt-get install -y maven
+
 # Copy everything needed to build
 COPY . .
-
-
-RUN chmod +x mvnw
 
 # Build the jar (skip tests to speed up)
 RUN ./mvnw package -DskipTests

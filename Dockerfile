@@ -8,3 +8,4 @@ COPY target/task-manager-app.jar /app/task-manager-app.jar
 
 # Run the JAR file
 ENTRYPOINT ["java", "-jar", "task-manager-app.jar"]
+

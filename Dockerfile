@@ -1,16 +1,21 @@
-# Use OpenJDK base image
-FROM openjdk:21-jdk-slim
+# Build the app
+FROM maven:3.9-eclipse-temurin-21 AS build
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy the JAR file
-COPY target/task-manager-app.jar /app/task-manager-app.jar
+# Copy everything needed to build
+COPY . .
 
+# Build the jar (skip tests to speed up)
+RUN ./mvnw package -DskipTests
 
-EXPOSE 8081
+# Stage 2: Create the runtime image
+FROM openjdk:21-jdk-slim
 
-# Command to run the JAR file
+WORKDIR /app
+
+# Copy the jar from the build stage
+COPY --from=build /app/target/*.jar /app/task-manager-app.jar
+
+# Run the app
 CMD ["java", "-jar", "/app/task-manager-app.jar"]
-
-

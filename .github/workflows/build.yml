@@ -51,14 +51,14 @@ jobs:
           name: task-manager-app
           path: downloaded-artifact
 
-      - name: Check downloaded files
-        run: |
-          ls -R downloaded-artifact
-
-      - name: Move JAR file to target
+      - name: Move JAR file into target folder
         run: |
           mkdir -p target
           mv downloaded-artifact/*.jar target/
+
+      - name: Check everything
+        run: |
+          ls -R
 
       - name: Build Docker Image
         run: |
@@ -66,6 +66,7 @@ jobs:
 
       - name: Push Docker Image to GitHub Container Registry
         run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker push ghcr.io/${{ github.repository_owner }}/task-manager-app:latest
 
       - name: Run Railway CLI inside Docker
@@ -73,4 +74,4 @@ jobs:
         with:
           run: |
             railway login --token ${{ secrets.RAILWAY_TOKEN }}
-            railway up --service=${{ secrets.RAILWAY_SERVICE_ID }} --artifact=${{ env.JAR_FILE }}
+            railway up --service=${{ secrets.RAILWAY_SERVICE_ID }}

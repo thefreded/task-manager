@@ -50,10 +50,10 @@ jobs:
       - name: Install Railway CLI
         run: npm install -g @railway/cli
 
-      - name: Attach Image and Redeploy
+      - name: Redeploy
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway redeploy -s ${{ secrets.RAILWAY_SERVICE_ID }} --image ghcr.io/${{ github.repository_owner }}/task-manager-app:latest
+          railway redeploy -s ${{ secrets.RAILWAY_SERVICE_ID }}
 
 

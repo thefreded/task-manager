@@ -16,6 +16,7 @@ RUN mvn clean package -DskipTests
 # Stage 2: Create the runtime image
 FROM openjdk:21-jdk-slim
 
+#dummy
 WORKDIR /app
 
 # Copy the built runner jar

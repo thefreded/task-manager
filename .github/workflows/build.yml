@@ -54,6 +54,6 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} railway redeploy -s ${{ secrets.RAILWAY_SERVICE_ID }}
+          railway redeploy -s ${{ secrets.RAILWAY_SERVICE_ID }} --yes
 
 

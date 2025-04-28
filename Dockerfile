@@ -11,7 +11,7 @@ RUN mvn dependency:go-offline
 COPY src ./src
 
 # Build the app as uber-jar
-RUN mvn clean package -DskipTests -Dquarkus.package.type=uber-jar
+RUN mvn clean package -DskipTests
 
 # Stage 2: Create the runtime image
 FROM openjdk:21-jdk-slim

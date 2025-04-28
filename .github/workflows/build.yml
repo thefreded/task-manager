@@ -54,6 +54,7 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway redeploy -s ${{ secrets.RAILWAY_SERVICE_ID }} --yes
+          railway link -s ${{ secrets.RAILWAY_SERVICE_ID }}
+          railway add -i ghcr.io/${{ github.repository_owner }}/task-manager-app:latest
 
 

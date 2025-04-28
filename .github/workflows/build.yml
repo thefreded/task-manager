@@ -50,8 +50,8 @@ jobs:
       - name: Install Railway CLI
         run: npm install -g @railway/cli
 
-      - name: Deploy New Image to Railway (zero downtime)
+      - name: Attach new Image and Redeploy
         run: |
-          railway login --token ${{ secrets.RAILWAY_TOKEN }}
           railway service update ${{ secrets.RAILWAY_SERVICE_ID }} --image ghcr.io/${{ github.repository_owner }}/task-manager-app:latest
+
 

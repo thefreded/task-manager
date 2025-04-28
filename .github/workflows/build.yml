@@ -45,10 +45,3 @@ jobs:
           docker build -t ghcr.io/${{ github.repository_owner }}/task-manager-app:latest .
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker push ghcr.io/${{ github.repository_owner }}/task-manager-app:latest
-
-      - name: Deploy to Railway
-        uses: docker://ghcr.io/railwayapp/cli:latest
-        with:
-          run: |
-            railway login --token ${{ secrets.RAILWAY_TOKEN }}
-            railway up --service=${{ secrets.RAILWAY_PROJECT_ID }} --image ghcr.io/${{ github.repository_owner }}/task-manager-app:latest

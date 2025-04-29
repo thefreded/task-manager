@@ -1,5 +1,5 @@
 ## Stage 1 : build with maven builder image
-FROM registry.access.redhat.com/ubi8/openjdk-21:1.1 AS build
+FROM registry.redhat.io/ubi9/openjdk-21-runtime:1.22-1.1744796716 AS build
 
 COPY --chown=185 mvnw /code/mvnw
 COPY --chown=185 .mvn /code/.mvn
@@ -11,7 +11,7 @@ COPY src /code/src
 RUN ./mvnw package -DskipTests
 
 ## Stage 2 : create the final image
-FROM registry.access.redhat.com/ubi8/openjdk-21:1.1
+FROM registry.redhat.io/ubi9/openjdk-21-runtime:1.22-1.1744796716
 
 # We make four distinct layers so if there are application changes the library layers can be reused
 COPY --from=build --chown=185 /code/target/quarkus-app/lib/ /deployments/lib/

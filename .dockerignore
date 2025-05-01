@@ -3,6 +3,7 @@
 !target/lib/*
 !target/quarkus-app/*
 
+uploads
 .env
 
 target/

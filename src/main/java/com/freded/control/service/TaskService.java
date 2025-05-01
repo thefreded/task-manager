@@ -1,6 +1,8 @@
 package com.freded.control.service;
 
 import com.freded.CustomWebApplicationException;
+import com.freded.control.dto.TaskQueryDTO;
+import com.freded.control.mappers.TaskMapper;
 import com.freded.control.repository.TaskRepository;
 import com.freded.control.dto.TaskDTO;
 import com.freded.entity.TaskEntity;
@@ -9,9 +11,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -24,43 +24,51 @@ public class TaskService {
     @Inject
     TaskRepository taskRepository;
 
+
     @Inject
-    UserService userService;
+    TaskMapper taskMapper;
 
     @Transactional
-    public TaskDTO create(final TaskDTO task) {
-        TaskEntity newTask = TaskEntity.fromDTO(task);
+    public TaskDTO create(final TaskDTO task, final String currentUser) {
+        TaskEntity newTask = taskMapper.toEntity(task);
 
-        String currentUser = userService.getUsername();
         newTask.setCreatedBy(currentUser);
-        return taskRepository.create(newTask).toDTO();
+        return taskMapper.toDTOWithoutFiles(taskRepository.create(newTask));
     }
 
-    public List<TaskDTO> getAll(TaskSortAndPaginationDTO qParams) {
-        String currentUser = userService.getUsername();
+    public List<TaskDTO> getAll(final TaskSortAndPaginationDTO qParams, final String currentUser) {
         List<TaskEntity> taskEntities = taskRepository.readAll(currentUser, qParams);
 
-        return taskEntities.stream()
-                .map(TaskEntity::toDTO)
-                .collect(Collectors.toList());
+        return taskMapper.toDTOList(taskEntities);
     }
 
-    public TaskDTO get(final String taskId) {
-        String currentUser = userService.getUsername();
-        return taskRepository.read(currentUser, taskId).toDTO();
+    public TaskDTO get(final String taskId, final String currentUser, final TaskQueryDTO taskParams) {
+
+        TaskEntity taskEntity = taskRepository.read(currentUser, taskId, taskParams);
+
+        if (taskEntity == null) {
+            return null;
+        }
+
+
+        if (taskParams.isLoadFiles()) {
+            return taskMapper.toDTOWithFiles(taskEntity);
+        } else {
+            return taskMapper.toDTOWithoutFiles(taskEntity);
+        }
     }
+
 
     @Transactional
-    public String delete(final String taskId) {
+    public String delete(final String taskId, final String currentUser) {
 
-        String currentUser = userService.getUsername();
         TaskEntity task = taskRepository.read(currentUser, taskId);
         return taskRepository.delete(task);
     }
 
     @Transactional
-    public TaskDTO update(final String taskId, final TaskDTO newTask) {
-        String currentUser = userService.getUsername();
+    public TaskDTO update(final String taskId, final TaskDTO newTask, final String currentUser) {
+
         TaskEntity task = taskRepository.read(currentUser, taskId);
 
         if (task == null) {
@@ -70,9 +78,9 @@ public class TaskService {
         // update task with new task inputs
         task.setName(newTask.getName());
         task.setDescription(newTask.getDescription());
-        task.setUpdatedAt(LocalDateTime.now());
 
-        return taskRepository.update(task).toDTO();
+        // TODO: downside is I need to flush and refresh to get the latest DB Value. Disucss later.
+        return taskMapper.toDTOWithoutFiles(taskRepository.update(task));
     }
 
 }

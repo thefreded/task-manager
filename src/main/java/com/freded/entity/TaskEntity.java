@@ -1,17 +1,15 @@
 package com.freded.entity;
 
-import com.freded.control.dto.TaskDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
-
 
 /**
  * Represents a Task in the entity manager.
@@ -45,9 +43,9 @@ public class TaskEntity {
 
     /**
      * The local date time that the task was created.
-     * It's set automatically by default with the current date and time the task ws created.
+     * It's set automatically by default with the current date and time the task was created.
      */
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     /**
      * The local date time when the task was updated (or last updated).
@@ -59,23 +57,18 @@ public class TaskEntity {
      */
     private String createdBy;
 
-    public static TaskEntity fromDTO(TaskDTO taskDTO) {
-        TaskEntity taskEntity = new TaskEntity();
-        taskEntity.setName(taskDTO.getName());
-        taskEntity.setDescription(taskDTO.getDescription());
-        return taskEntity;
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    private List<TaskFileEntity> taskFiles = new ArrayList<>();
+
+    @PrePersist
+    protected void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        createdAt = now;
+        updatedAt = now;
     }
 
-    // toDTO method
-    public TaskDTO toDTO() {
-        TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setId(this.id);
-        taskDTO.setName(this.name);
-        taskDTO.setDescription(this.description);
-        taskDTO.setCreatedAt(this.createdAt);
-        taskDTO.setUpdatedAt(this.updatedAt);
-        return taskDTO;
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
-
-
 }

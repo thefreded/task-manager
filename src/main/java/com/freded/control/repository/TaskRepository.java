@@ -1,11 +1,13 @@
 package com.freded.control.repository;
 
+import com.freded.control.dto.TaskQueryDTO;
 import com.freded.control.service.PaginationAndSortingService;
 import com.freded.entity.TaskEntity;
 import com.freded.control.dto.TaskSortAndPaginationDTO;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
@@ -86,11 +88,32 @@ public class TaskRepository {
      * @return the found task {@link TaskEntity}, or {@code null} if no task is found.
      */
     public TaskEntity read(final String createdBy, String taskId) {
-        String queryString = "SELECT task FROM TaskEntity task WHERE task.id = :taskId AND task.createdBy =:createdBy";
-        TypedQuery<TaskEntity> query = em.createQuery(queryString, TaskEntity.class);
+        TaskQueryDTO defaultParams = new TaskQueryDTO();
 
-        return query.setParameter("taskId", taskId).setParameter("createdBy", createdBy).getResultStream().findFirst().orElse(null);
+        return read(createdBy, taskId, defaultParams);
 
+    }
+
+    public  TaskEntity read(final String createdBy, final String taskId, final TaskQueryDTO queryParam){
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<TaskEntity> cq = cb.createQuery(TaskEntity.class);
+        Root<TaskEntity> task = cq.from(TaskEntity.class);
+
+        // Add conditions
+        Predicate idPredicate = cb.equal(task.get("id"), taskId);
+        Predicate createdByPredicate = cb.equal(task.get("createdBy"), createdBy);
+        cq.where(cb.and(idPredicate, createdByPredicate));
+
+        // Only fetch taskFiles if explicitly requested
+        if (queryParam.isLoadFiles()) {
+            task.fetch("taskFiles", JoinType.LEFT);
+        }
+
+        try {
+            return em.createQuery(cq).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     /***

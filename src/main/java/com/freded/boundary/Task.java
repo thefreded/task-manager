@@ -1,6 +1,7 @@
 package com.freded.boundary;
 
 import com.freded.control.dto.TaskDTO;
+import com.freded.control.dto.TaskQueryDTO;
 import com.freded.control.dto.TaskSortAndPaginationDTO;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
@@ -46,7 +47,7 @@ public interface Task {
      */
     @GET
     @Path("{taskId}")
-    public TaskDTO get(@PathParam("taskId") final String taskId);
+    public TaskDTO get(@PathParam("taskId") final String taskId, @BeanParam final TaskQueryDTO taskParams);
 
     /**
      * Deletes a task with the taskId provided.

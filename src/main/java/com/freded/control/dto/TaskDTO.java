@@ -1,10 +1,13 @@
 package com.freded.control.dto;
 
+import com.freded.entity.TaskFileEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -40,6 +43,8 @@ public class TaskDTO {
      * The local date time when the task was updated (or last updated).
      */
     private LocalDateTime updatedAt;
+
+    private List<TaskFileDTO> taskFiles = new ArrayList<>();
 
 
 }

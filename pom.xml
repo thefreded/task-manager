@@ -23,6 +23,7 @@
         <quarkus-resteasy-jackson.version>3.20.0</quarkus-resteasy-jackson.version>
         <resteasy-multipart-provider.version>6.2.12.Final</resteasy-multipart-provider.version>
         <quarkus-jdbc-postgres.version>3.22.0</quarkus-jdbc-postgres.version>
+        <quarkus-jdbc-h2.version>3.21.0</quarkus-jdbc-h2.version>
         <quarkus-oidc.version>3.20.0</quarkus-oidc.version>
         <quarkus-security.version>3.20.0</quarkus-security.version>
         <quarkus-junit5.version>3.20.0</quarkus-junit5.version>
@@ -125,6 +126,12 @@
             <artifactId>quarkus-test-security</artifactId>
             <version>${quarkus-test-security.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-h2</artifactId>
+            <version>${quarkus-jdbc-h2.version}</version>
         </dependency>
 
         <dependency>
